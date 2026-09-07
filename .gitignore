@@ -1,0 +1,17 @@
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Vector DB & Processed cache
+chroma_db/
+processed/
+
+# IDE / System
+.vscode/
+.idea/
+*.log

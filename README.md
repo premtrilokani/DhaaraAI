@@ -165,9 +165,9 @@ Here are key questions external examiners and professors frequently ask about th
 
 ### Q1: Why did you use RAG instead of simply asking ChatGPT or fine-tuning an LLM?
 > **Answer**:
-> 1. **Zero Hallucination**: Standard LLMs hallucinate non-existent sections and penalties. RAG grounds the model to answer *strictly* from the provided statutory text.
-> 2. **Verifiability**: RAG provides exact citations (Act name, Section number, page number) so citizens and lawyers can verify the legal provision directly.
-> 3. **Maintenance & Cost**: Fine-tuning an LLM on legal text is computationally expensive and becomes outdated when laws are amended. With RAG, updating from IPC to BNS is as simple as dropping new PDFs into `/data` and clicking "Re-index".
+> 1. **High Factual Precision & Grounding**: Standard LLMs can fabricate non-existent sections and penalties. RAG grounds the model to answer from verified statutory texts with exact citations.
+> 2. **Verifiability**: RAG provides exact citations (Act name, Section number) so citizens and lawyers can verify the legal provision directly.
+> 3. **Maintenance & Cost**: Fine-tuning an LLM on legal text is computationally expensive and becomes outdated when laws are amended. With RAG, updating from IPC to BNS is as simple as updating clean statutory data in `/data` and clicking "Sync".
 
 ### Q2: Why use `all-MiniLM-L6-v2` instead of OpenAI text-embedding-3-small?
 > **Answer**:

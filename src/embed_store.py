@@ -120,6 +120,45 @@ class LegalEmbedStore:
         print(f"[embed_store] Indexing complete! Total collection count: {self.collection.count()} chunks.")
         return upserted_count
 
+    def index_statutes_json(self, json_path: str) -> int:
+        """
+        Indexes raw statutory definitions from a structured JSON file.
+        """
+        p = Path(json_path)
+        if not p.exists():
+            print(f"[embed_store] Statutes JSON not found at: {json_path}")
+            return 0
+
+        with open(p, "r", encoding="utf-8") as f:
+            statutes = json.load(f)
+
+        chunks = []
+        for idx, item in enumerate(statutes, 1):
+            sec_clean = item.get("section", f"Statute_{idx}").replace(" ", "_")
+            chunks.append({
+                "chunk_id": f"statute_{sec_clean}_{idx}",
+                "text": item.get("text", ""),
+                "source": item.get("source", "Indian Statutes"),
+                "page": item.get("page", 1),
+                "section": item.get("section", "General"),
+                "section_title": item.get("section_title", ""),
+                "token_count": len(item.get("text", "").split())
+            })
+
+        print(f"[embed_store] Loaded {len(chunks)} statutory chunks from {p.name}.")
+        return self.add_chunks(chunks)
+
+    def seed_defaults_if_empty(self, data_dir: Optional[str] = None):
+        """
+        Seeds ChromaDB automatically with verified statutory data if the collection is empty.
+        """
+        if self.collection.count() == 0:
+            root = Path(__file__).parent.parent
+            statutes_file = root / "data" / "comprehensive_statutes.json"
+            if statutes_file.exists():
+                print(f"[embed_store] Collection is empty. Auto-seeding from {statutes_file.name}...")
+                self.index_statutes_json(str(statutes_file))
+
     def index_from_json(self, json_path: str = "processed/chunks.json") -> int:
         """
         Helper method to load chunks from a JSON file and index them.
